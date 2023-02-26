@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -22,9 +21,9 @@ namespace P01AplikacjaZawodnicy
     {
         private string url;
         private string connString;
-        private Zawodnik[] tablicaZawodnikow;
+        private ZawodnikVM[] tablicaZawodnikow;
         private const string naglowek = "id_zawodnika;id_trenera;imie;nazwisko;kraj;data urodzenia;wzrost;waga";
-        Zawodnik[] zawodnicyKraju;
+        ZawodnikVM[] zawodnicyKraju;
         SposobPolaczenia sposobPolaczenia;
      
 
@@ -47,7 +46,7 @@ namespace P01AplikacjaZawodnicy
           
         }
 
-        public Zawodnik[] TablicaZawodnikow
+        public ZawodnikVM[] TablicaZawodnikow
         {
             get { return tablicaZawodnikow; }
         }
@@ -70,7 +69,25 @@ namespace P01AplikacjaZawodnicy
 
         private void wczytajZawodnikowZBazy()
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            tablicaZawodnikow = db.Zawodnik
+                .Select(x=>new ZawodnikVM()
+                {
+                    Imie = x.imie,
+                    Nazwisko = x.nazwisko,
+                    Kraj = x.kraj,
+                    DataUrodzenia = x.data_ur,
+                    Waga = x.waga == null? 0 : (int)x.waga,
+                    Wzrost = x.wzrost,
+                    Id_zawodnika = x.id_zawodnika,
+                    Id_trenera = x.id_trenera
+                })
+                .ToArray();
+            // transformujemy zawdonikow bazodanowych na zawonicy viewModel
+            // w celu przyblizenia się do wdrożenia 
+            // wzroca architektonicznego MVVM 
+
+
             // do uzupełnienia 
             // tablicaZawodnikow = ....
         }
@@ -81,12 +98,12 @@ namespace P01AplikacjaZawodnicy
             string[] separatory = { "\r\n" };
             string[] wiersze = dane.Split(separatory, StringSplitOptions.RemoveEmptyEntries);
             
-            List<Zawodnik> zawodnicy = new List<Zawodnik>();
+            List<ZawodnikVM> zawodnicy = new List<ZawodnikVM>();
 
             for (int i = 1; i < wiersze.Length; i++) 
             {
                 string[]komorki = wiersze[i].Split(';');
-                Zawodnik z = new Zawodnik();
+                ZawodnikVM z = new ZawodnikVM();
 
                 z.Id_zawodnika = Convert.ToInt32(komorki[0]);
 
@@ -107,21 +124,29 @@ namespace P01AplikacjaZawodnicy
       
         public string PodajLiczbeZawodnikowZDanegoKraju(string kraj)
         {
-            throw new NotImplementedException();
-            // do uzupelnienia 
+            int ile= tablicaZawodnikow
+                .Where(x => x.Kraj== kraj)
+                .Count();
+
+            return ile.ToString();
         }
 
         public GrupaKraju[] PodajSredniWzrostZawodnikowDlaKazdegoKraju()
         {
-            throw new NotImplementedException();
-            // do uzupełenia 
-
+            return
+                tablicaZawodnikow
+                    .Where(x => x.Wzrost != null)
+                    .GroupBy(x => x.Kraj)
+                    .Select(x => new GrupaKraju()
+                    {
+                        Kraj = x.Key,
+                        SredniWzrost = x.Average(y => (int)y.Wzrost)
+                    }).ToArray();
         }
 
         public void ZnajdzZawodnikow(string kraj)
         {
-            throw new NotImplementedException();
-            // zawodnicyKraju = ....;
+            zawodnicyKraju = tablicaZawodnikow.Where(x => x.Kraj == kraj).ToArray();
         }
 
         public void ZapiszPlik(string sciezka)
@@ -132,27 +157,55 @@ namespace P01AplikacjaZawodnicy
                 {
                     sb.AppendLine(
                         $"{w.Id_zawodnika};{w.Id_trenera};{w.Imie}" +
-                        $"{w.Nazwisko};{w.Kraj};{w.DataUrodzenia.ToString("yyyy-MM-dd")};" +
+                        $"{w.Nazwisko};{w.Kraj};{w.DataUrodzenia?.ToString("yyyy-MM-dd")};" + // ten znak zapytania to taki skrótowy if, któy działa tak, że jzezli DataUrodzenia = null to nic nie wypisuj a jeżeli jest != null to użyj metody ToString()
                         $"{w.Wzrost};{w.Waga}"
                         );
                 }
+                
+            File.WriteAllText(sciezka, sb.ToString());
 
-            File.WriteAllText(sciezka, sb.ToString());                                                         
+            //ZawodnikVM zv = new ZawodnikVM();
+            //string a = zv?.Kraj;
+
+            //if (zv.Kraj == null)
+            //    a = "";
+            //else
+            //    a = zv.Kraj;       
         }
 
         public void Usun(int id)
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            var z = db.Zawodnik.FirstOrDefault(x => x.id_zawodnika == id);
+            db.Zawodnik.DeleteOnSubmit(z);
+            db.SubmitChanges();
         }
 
-        public void Edytuj(Zawodnik z)
+        public void Edytuj(ZawodnikVM z)
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            var doEdycji = db.Zawodnik.FirstOrDefault(x => x.id_zawodnika == z.Id_zawodnika);
+            doEdycji.imie = z.Imie;
+            doEdycji.nazwisko = z.Nazwisko;
+            doEdycji.kraj = z.Kraj;
+            doEdycji.data_ur = z.DataUrodzenia;
+            doEdycji.waga = z.Waga;
+            doEdycji.wzrost = z.Wzrost;
+            db.SubmitChanges();
         }
 
-        public void Dodaj(Zawodnik z)
+        public void Dodaj(ZawodnikVM z)
         {
-            throw new NotImplementedException();
+            Zawodnik nowy = new Zawodnik();
+            nowy.imie = z.Imie;
+            nowy.nazwisko = z.Nazwisko;
+            nowy.kraj = z.Kraj;
+            nowy.data_ur = z.DataUrodzenia;
+            nowy.waga = z.Waga;
+            nowy.wzrost = z.Wzrost;
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            db.Zawodnik.InsertOnSubmit(nowy);
+            db.SubmitChanges();
         }
     }
 }

@@ -42,6 +42,16 @@ namespace P01WstepLINQ
                    //  .Select(x=>x)
                      .ToArray();
 
+            // inny alternatywny zapis 
+
+            Zawodnik[] w4b = (from x in zawodnicy
+                              where x.Wzrost > 2 * x.Waga && x.DataUrodzenia.Month > 6
+                              orderby x.Imie.Length, x.Wzrost
+                              select x
+                              ).ToArray();
+                             
+
+
 
             string[] w5 = zawodnicy.Select(x => x.Nazwisko).ToArray();
 

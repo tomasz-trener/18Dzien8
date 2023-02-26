@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -80,12 +81,17 @@
     <Compile Include="GrupaKraju.cs" />
     <Compile Include="ManagerPogody.cs" />
     <Compile Include="ManagerZawodnikow.cs" />
+    <Compile Include="ModelBazy.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelBazy.dbml</DependentUpon>
+    </Compile>
     <Compile Include="PDFManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ManagerMiast.cs" />
-    <Compile Include="Miasto.cs" />
-    <Compile Include="Zawodnik.cs" />
+    <Compile Include="MiastoVM.cs" />
+    <Compile Include="ZawodnikVM.cs" />
     <EmbeddedResource Include="FrmSzczegoly.resx">
       <DependentUpon>FrmSzczegoly.cs</DependentUpon>
     </EmbeddedResource>
@@ -107,6 +113,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ModelBazy.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>ModelBazy.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ModelBazy.dbml.layout">
+      <DependentUpon>ModelBazy.dbml</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -120,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

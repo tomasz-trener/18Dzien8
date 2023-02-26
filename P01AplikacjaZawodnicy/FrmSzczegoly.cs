@@ -12,7 +12,7 @@ namespace P01AplikacjaZawodnicy
 {
     public partial class FrmSzczegoly : Form
     {
-        Zawodnik zawodnik;
+        ZawodnikVM zawodnik;
         ManagerZawodnikow mz;
         FrmZawodnicy frmZawodnicy;
 
@@ -26,7 +26,7 @@ namespace P01AplikacjaZawodnicy
            // string conn = frmZawodnicy.TxtParamPolaczenia.Text;
         }
 
-        public FrmSzczegoly(Zawodnik zawodnik, ManagerZawodnikow mz, FrmZawodnicy frmZawodnicy)
+        public FrmSzczegoly(ZawodnikVM zawodnik, ManagerZawodnikow mz, FrmZawodnicy frmZawodnicy)
         {
             InitializeComponent();
             dodajZdarzeniaDoTextboxow();
@@ -38,9 +38,13 @@ namespace P01AplikacjaZawodnicy
             txtNazwisko.Text = zawodnik.Nazwisko;
             txtKraj.Text = zawodnik.Kraj;
 
-            dtpDataUr.Value = zawodnik.DataUrodzenia;
+            if(zawodnik.DataUrodzenia != null)
+                dtpDataUr.Value = (DateTime)zawodnik.DataUrodzenia;
+                 
             numWaga.Value = zawodnik.Waga;
-            numWzrost.Value = zawodnik.Wzrost;
+            
+            if (zawodnik.Wzrost != null)
+                numWzrost.Value = (int)zawodnik.Wzrost;
         }
 
         private void dodajZdarzeniaDoTextboxow()
@@ -81,7 +85,7 @@ namespace P01AplikacjaZawodnicy
 
                 if (zawodnik == null) // tryb dodawania
                 {
-                    zawodnik = new Zawodnik();
+                    zawodnik = new ZawodnikVM();
                     ZczytajDane();
                     mz.Dodaj(zawodnik);
                 }

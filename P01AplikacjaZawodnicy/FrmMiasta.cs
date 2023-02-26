@@ -56,14 +56,14 @@ namespace P01AplikacjaZawodnicy
 
         private void btnUsun_Click(object sender, EventArgs e)
         {
-            Miasto zaznaczone= (Miasto)lbDane.SelectedItem;
+            MiastoVM zaznaczone= (MiastoVM)lbDane.SelectedItem;
             mm.Usun(zaznaczone.Id);
             Odswiez();
         }
 
         private void btnEdytuj_Click(object sender, EventArgs e)
         {
-            Miasto zaznaczone = (Miasto)lbDane.SelectedItem;
+            MiastoVM zaznaczone = (MiastoVM)lbDane.SelectedItem;
             zaznaczone.Nazwa = txtNazwaMiasta.Text;
 
             mm.Edytuj(zaznaczone);
@@ -72,7 +72,7 @@ namespace P01AplikacjaZawodnicy
 
         private void lbDane_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Miasto zaznaczone = (Miasto)lbDane.SelectedItem;
+            MiastoVM zaznaczone = (MiastoVM)lbDane.SelectedItem;
             txtNazwaMiasta.Text = zaznaczone.Nazwa;
 
             ManagerPogody mp = new ManagerPogody();
@@ -88,7 +88,7 @@ namespace P01AplikacjaZawodnicy
 
             if (dr == DialogResult.Yes)
             {
-                Miasto nowe = new Miasto();
+                MiastoVM nowe = new MiastoVM();
                 nowe.Nazwa = txtNazwaMiasta.Text;
 
                 mm.Dodaj(nowe);

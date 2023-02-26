@@ -39,7 +39,7 @@ namespace P01AplikacjaZawodnicy
         {
             mz.WczytajZawodnikow();
             // tutaj chce miec tych zawodnikach
-            Zawodnik[] zawodnicy = mz.TablicaZawodnikow;
+            ZawodnikVM[] zawodnicy = mz.TablicaZawodnikow;
            
             // lbDane.Items.Clear();
             //for (int i = 0; i < zawodnicy.Length; i++)
@@ -98,14 +98,14 @@ namespace P01AplikacjaZawodnicy
 
         private void btnUsun_Click(object sender, EventArgs e)
         {
-            Zawodnik zaznaczony = (Zawodnik)lbDane.SelectedItem;
+            ZawodnikVM zaznaczony = (ZawodnikVM)lbDane.SelectedItem;
             mz.Usun(zaznaczony.Id_zawodnika);
             Odswiez();
         }
 
         private void btnEdytuj_Click(object sender, EventArgs e)
         {     
-            Zawodnik zaznaczony = (Zawodnik)lbDane.SelectedItem;
+            ZawodnikVM zaznaczony = (ZawodnikVM)lbDane.SelectedItem;
 
             FrmSzczegoly frmSzczegoly = new FrmSzczegoly(zaznaczony,mz,this);
             frmSzczegoly.Show();

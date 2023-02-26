@@ -11,10 +11,10 @@ namespace P01AplikacjaZawodnicy
     {
 
         private string connString;
-        private Miasto[] tablicaMiast;
+        private MiastoVM[] tablicaMiast;
         
 
-        public Miasto[] TablicaMiast
+        public MiastoVM[] TablicaMiast
         {
             get{ return tablicaMiast; }
         }
@@ -28,23 +28,38 @@ namespace P01AplikacjaZawodnicy
 
         public void WczytajMiasta()
         {
-            throw new NotImplementedException();
-            //     tablicaMiast = ....;
+            ModelBazyDataContext db = new ModelBazyDataContext();
+
+            tablicaMiast = db.Miasto.Select(x=>new MiastoVM()
+            {
+                Id = x.id_miasta,
+                Nazwa = x.nazwa_miasta
+            }).ToArray();
         }
 
         public void Usun(int id)
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            var doUsuniecia = db.Miasto.FirstOrDefault(x => x.id_miasta == id);
+            db.Miasto.DeleteOnSubmit(doUsuniecia);
+            db.SubmitChanges();
         }
 
-        public void Edytuj(Miasto m)
+        public void Edytuj(MiastoVM m)
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            var doEdycji = db.Miasto.FirstOrDefault(x => x.id_miasta == m.Id);
+            doEdycji.nazwa_miasta = m.Nazwa;
+            db.SubmitChanges();
         }
 
-        public void Dodaj(Miasto m)
+        public void Dodaj(MiastoVM m)
         {
-            throw new NotImplementedException();
+            ModelBazyDataContext db = new ModelBazyDataContext();
+            Miasto nowe = new Miasto();
+            nowe.nazwa_miasta = m.Nazwa;
+            db.Miasto.InsertOnSubmit(nowe);
+            db.SubmitChanges();
         }
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P01AplikacjaZawodnicy
 {
-    internal class Miasto
+    internal class MiastoVM
     {
         public int Id { get; set; }
         public string Nazwa { get; set; }

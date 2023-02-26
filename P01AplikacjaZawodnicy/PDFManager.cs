@@ -10,9 +10,9 @@ namespace P01AplikacjaZawodnicy
 {
     internal class PDFManager
     {
-        private Zawodnik[] zawodnicy;
+        private ZawodnikVM[] zawodnicy;
 
-        public PDFManager(Zawodnik[] zawodnicy)
+        public PDFManager(ZawodnikVM[] zawodnicy)
         {
             this.zawodnicy = zawodnicy;
         }
