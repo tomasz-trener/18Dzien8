@@ -65,7 +65,7 @@ namespace P02ORMWstep
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Zawodnik> Zawodniks
+		public System.Data.Linq.Table<Zawodnik> Zawodnik
 		{
 			get
 			{

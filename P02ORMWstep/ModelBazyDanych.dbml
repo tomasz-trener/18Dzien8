@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Zawodnicy" Class="ModelBazyDanychDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=Zawodnicy;User ID=sa" SettingsObjectName="P02ORMWstep.Properties.Settings" SettingsPropertyName="ZawodnicyConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.zawodnicy" Member="Zawodniks">
+  <Table Name="dbo.zawodnicy" Member="Zawodnik">
     <Type Name="Zawodnik">
       <Column Name="id_zawodnika" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="id_trenera" Type="System.Int32" DbType="Int" CanBeNull="true" />

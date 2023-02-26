@@ -11,12 +11,52 @@ namespace P02ORMWstep
         static void Main(string[] args)
         {
             ModelBazyDanychDataContext db = new ModelBazyDanychDataContext();
-            Zawodnik[] w1 = db.Zawodniks.ToArray();
+          //  Zawodnik[] w1 = db.Zawodniks.ToArray();
 
-            foreach (var z in w1)
-            {
-                Console.WriteLine(z.imie + " " + z.nazwisko);
-            }
+            var w2=
+                db.Zawodnik
+                    .GroupBy(x => x.kraj)
+                    .Select(x => new
+                    {
+                        Kraj = x.Key,
+                        SredniWzrost = x.Average(y => y.wzrost)
+                    }).ToArray();
+
+
+            //foreach (var z in w1)
+            //{
+            //    Console.WriteLine(z.imie + " " + z.nazwisko);
+            //}
+
+
+            // dodawanie danych do bazy 
+
+            //Zawodnik nowy = new Zawodnik()
+            //{
+            //    imie = "adam",
+            //    nazwisko = "nowak",
+            //    waga = 70,
+            //    wzrost = 180,
+            //    kraj = "pol",
+            //    data_ur = new DateTime(2000, 2, 4)
+            //};
+
+            //db.Zawodnik.InsertOnSubmit(nowy);
+            //db.SubmitChanges();
+
+            // edycja 
+            //var doEdycji = db.Zawodnik.FirstOrDefault(x => x.id_zawodnika == 19);
+            //doEdycji.imie = "Lukasz";
+            //doEdycji.kraj = "AUT";
+            //db.SubmitChanges();
+
+
+            // usuwanie 
+            var doUsuniecia = db.Zawodnik.FirstOrDefault(x => x.id_zawodnika == 19);
+            db.Zawodnik.DeleteOnSubmit(doUsuniecia);
+            db.SubmitChanges();
+
+
 
             Console.ReadKey();
         }
